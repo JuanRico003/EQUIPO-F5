@@ -44,6 +44,9 @@ class RegistroBeneficiario:
 
     @classmethod
     def desde_json(cls, datos_json):
+        if not isinstance(datos_json, dict):
+            raise ValueError("El registro recibido no tiene un formato válido.")
+        
         return cls(
             consecutivo=cls._a_entero_seguro(datos_json.get("consecutivo")),
             fecha_actualizacion=datos_json.get("fecha_de_actualizaci_n") or "",
