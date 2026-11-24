@@ -182,8 +182,6 @@ set DATABASE_URL=postgresql://fruitscan:fruitscan@localhost:5432/fruitscan
 4. Apunta a una fruta/verdura sobre la cámara o carga una imagen desde disco.
 5. La predicción aparecerá al instante con etiqueta, confianza y top‑3.
 
-**Para la presentación:** tener a mano 2‑3 imágenes de respaldo por clase (guardadas localmente) por si la cámara falla.
-
 ---
 
 ## 10. Pruebas automatizadas
@@ -194,5 +192,3 @@ py -3 -m pytest tests/
 Cubren: health degradado cuando falta modelo, predict sin archivo (400), formato no permitido (415), histogram vacío, stats vacío, ruta API desconocida (404).
 
 ---
-
-*Generado automáticamente a partir de la estructura del proyecto y la rúbrica de evaluación.*
