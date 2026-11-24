@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: fruitscan-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-fruitscan}
+      POSTGRES_USER: ${POSTGRES_USER:-fruitscan}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fruitscan}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fruitscan} -d ${POSTGRES_DB:-fruitscan}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - fruitscan
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fruitscan-app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-fruitscan}:${POSTGRES_PASSWORD:-fruitscan}@db:5432/${POSTGRES_DB:-fruitscan}
+      SECRET_KEY: ${SECRET_KEY:-cambia-esta-clave}
+      ARTIFACTS_DIR: /app/ml/artifacts
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-10}
+    ports:
+      - "${APP_PORT:-5000}:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - fruitscan
+
+  adminer:
+    image: adminer:4
+    container_name: fruitscan-adminer
+    restart: unless-stopped
+    profiles: ["tools"]
+    ports:
+      - "${ADMINER_PORT:-8080}:8080"
+    depends_on:
+      - db
+    networks:
+      - fruitscan
+
+volumes:
+  pgdata:
+
+networks:
+  fruitscan:
+    driver: bridge

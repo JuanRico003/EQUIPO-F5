@@ -1,0 +1,24 @@
+                    precision    recall  f1-score   support
+
+      apples_fresh     0.9858    0.9905    0.9881       210
+     apples_rotten     0.9797    0.9797    0.9797       295
+      banana_fresh     1.0000    1.0000    1.0000       197
+     banana_rotten     0.9964    1.0000    0.9982       276
+ bittergourd_fresh     1.0000    1.0000    1.0000        34
+bittergourd_rotten     1.0000    1.0000    1.0000        37
+    capsicum_fresh     1.0000    1.0000    1.0000        99
+   capsicum_rotten     1.0000    1.0000    1.0000        91
+    cucumber_fresh     0.9787    0.9020    0.9388        51
+   cucumber_rotten     0.8837    0.8837    0.8837        43
+        okra_fresh     0.9697    1.0000    0.9846        64
+       okra_rotten     0.9167    0.9429    0.9296        35
+     oranges_fresh     0.9789    1.0000    0.9894       186
+    oranges_rotten     0.9897    0.9602    0.9747       201
+      potato_fresh     0.9464    0.9636    0.9550        55
+     potato_rotten     0.9753    0.9753    0.9753        81
+      tomato_fresh     0.9738    0.9947    0.9841       187
+     tomato_rotten     1.0000    0.9780    0.9889       182
+
+          accuracy                         0.9841      2324
+         macro avg     0.9764    0.9761    0.9761      2324
+      weighted avg     0.9842    0.9841    0.9840      2324

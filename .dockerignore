@@ -1,0 +1,15 @@
+.git
+.venv
+venv
+__pycache__
+*.pyc
+dataset
+data
+instance
+.env
+tests
+README.md
+ml/train.py
+ml/prepare_data.py
+ml/artifacts/model.pt
+**/.DS_Store

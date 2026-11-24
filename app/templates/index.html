@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FruitScan · Clasificador de frutas y verduras</title>
+  <meta name="description" content="Detección en tiempo real de frutas y verduras frescas o podridas con transfer learning." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 8c-3.5 0-6 2.6-6 6.2C6 18 8.4 21 12 21s6-3 6-6.8C18 10.6 15.5 8 12 8Z"/>
+          <path d="M12 8c0-2 1-4 3-5"/>
+          <path d="M12 8c-.6-1.8-2-3-4-3.4"/>
+        </svg>
+      </div>
+      <div>
+        <h1>FruitScan</h1>
+        <p>Clasificación de frescura en tiempo real</p>
+      </div>
+    </div>
+
+    <div class="topbar-meta">
+      <span class="badge" id="modelBadge" title="Exactitud del modelo en el conjunto de test">
+        <span class="badge-dot"></span>
+        <span id="modelAccuracy">modelo…</span>
+      </span>
+      <span class="badge badge-muted" title="Estado del backend y la base de datos">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">conectando…</span>
+      </span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ============================ CAPTURA ============================ -->
+    <section class="card capture-card" aria-labelledby="capture-title">
+      <div class="card-head">
+        <div>
+          <h2 id="capture-title">Captura</h2>
+          <p class="muted">Cámara del dispositivo o archivo local</p>
+        </div>
+        <label class="switch" title="Analizar automáticamente cada 1,2 s">
+          <input type="checkbox" id="liveToggle" />
+          <span class="switch-track"><span class="switch-thumb"></span></span>
+          <span class="switch-label">En vivo</span>
+        </label>
+      </div>
+
+      <div class="stage" id="stage">
+        <video id="video" autoplay playsinline muted></video>
+        <img id="snapshot" alt="Última captura analizada" hidden />
+        <div class="stage-placeholder" id="stagePlaceholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 8.5A2.5 2.5 0 0 1 5.5 6h1.2a2 2 0 0 0 1.7-.95l.6-1A1.5 1.5 0 0 1 10.3 3h3.4a1.5 1.5 0 0 1 1.3.73l.6 1A2 2 0 0 0 17.3 6h1.2A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5v-9Z"/>
+            <circle cx="12" cy="13" r="3.4"/>
+          </svg>
+          <span>Activa la cámara para empezar</span>
+        </div>
+        <div class="reticle" aria-hidden="true"></div>
+        <div class="stage-badge" id="stageBadge" hidden>
+          <span class="pulse"></span> analizando
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" id="btnStart" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M15 10l4.5-2.6v9.2L15 14"/><rect x="3" y="6" width="12" height="12" rx="2.5"/></svg>
+          Iniciar cámara
+        </button>
+        <button class="btn" id="btnCapture" type="button" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/></svg>
+          Analizar
+        </button>
+        <button class="btn btn-ghost" id="btnUpload" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16"/></svg>
+          Subir imagen
+        </button>
+        <input type="file" id="fileInput" accept="image/*" hidden />
+      </div>
+
+      <p class="hint" id="cameraHint">Consejo: centra la fruta sobre un fondo neutro y con buena luz.</p>
+    </section>
+
+    <!-- ============================ RESULTADO ============================ -->
+    <section class="card result-card" aria-labelledby="result-title">
+      <div class="card-head">
+        <div>
+          <h2 id="result-title">Resultado</h2>
+          <p class="muted">Predicción de la última inferencia</p>
+        </div>
+        <span class="latency" id="predLatency">—</span>
+      </div>
+
+      <div class="verdict" id="verdict">
+        <div class="verdict-state" id="verdictState">sin datos</div>
+        <div class="verdict-label" id="predLabel">Esperando una imagen…</div>
+        <div class="verdict-chips">
+          <span class="chip" id="chipFruit">—</span>
+          <span class="chip" id="chipState">—</span>
+        </div>
+      </div>
+
+      <div class="confidence">
+        <div class="confidence-head">
+          <span>Confianza</span>
+          <strong id="predConfidence">0%</strong>
+        </div>
+        <div class="confidence-track"><div class="confidence-fill" id="confidenceFill"></div></div>
+      </div>
+
+      <div class="topk">
+        <div class="topk-head">Top 3 candidatos</div>
+        <ul id="predTop3" class="topk-list">
+          <li class="topk-empty">Sin predicciones todavía</li>
+        </ul>
+      </div>
+
+      <div class="meta-row">
+        <span id="predTimestamp">—</span>
+        <span id="predSource">—</span>
+      </div>
+    </section>
+
+    <!-- ============================ HISTORIAL ============================ -->
+    <section class="card history-card" aria-labelledby="history-title">
+      <div class="card-head">
+        <div>
+          <h2 id="history-title">Historial</h2>
+          <p class="muted">Registro persistente de inferencias</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btnClear" type="button">Limpiar</button>
+      </div>
+
+      <div class="stats" role="list">
+        <div class="stat" role="listitem">
+          <span class="stat-label">Total</span>
+          <span class="stat-value" id="statTotal">0</span>
+        </div>
+        <div class="stat" role="listitem">
+          <span class="stat-label">Confianza media</span>
+          <span class="stat-value" id="statAvg">—</span>
+        </div>
+        <div class="stat" role="listitem">
+          <span class="stat-label">Frescas</span>
+          <span class="stat-value stat-fresh" id="statFresh">0</span>
+        </div>
+        <div class="stat" role="listitem">
+          <span class="stat-label">Podridas</span>
+          <span class="stat-value stat-rotten" id="statRotten">0</span>
+        </div>
+      </div>
+
+      <ul class="history-list" id="historyList">
+        <li class="history-empty">Aún no hay inferencias registradas</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>MobileNetV3-Small · Transfer Learning (ImageNet) · Flask + PostgreSQL</span>
+    <span id="footerCount"></span>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

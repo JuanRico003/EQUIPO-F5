@@ -1,0 +1,19 @@
+# Entorno y Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+instance/
+.env
+
+# Datos pesados (el dataset original y los splits se regeneran localmente)
+data/
+dataset/
+
+# Nota: ml/artifacts/ NO se ignora para que model.onnx, labels.json
+# y las métricas entrenadas estén disponibles inmediatamente al clonar el repo.
+
+# Sistema
+.DS_Store
+Thumbs.db

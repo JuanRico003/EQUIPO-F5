@@ -1,0 +1,128 @@
+[
+  {
+    "label": "apples_fresh",
+    "fruit": "apples",
+    "state": "fresh",
+    "display": "Manzana fresco",
+    "index": 0
+  },
+  {
+    "label": "apples_rotten",
+    "fruit": "apples",
+    "state": "rotten",
+    "display": "Manzana podrido",
+    "index": 1
+  },
+  {
+    "label": "banana_fresh",
+    "fruit": "banana",
+    "state": "fresh",
+    "display": "Platano fresco",
+    "index": 2
+  },
+  {
+    "label": "banana_rotten",
+    "fruit": "banana",
+    "state": "rotten",
+    "display": "Platano podrido",
+    "index": 3
+  },
+  {
+    "label": "bittergourd_fresh",
+    "fruit": "bittergourd",
+    "state": "fresh",
+    "display": "Melon amargo fresco",
+    "index": 4
+  },
+  {
+    "label": "bittergourd_rotten",
+    "fruit": "bittergourd",
+    "state": "rotten",
+    "display": "Melon amargo podrido",
+    "index": 5
+  },
+  {
+    "label": "capsicum_fresh",
+    "fruit": "capsicum",
+    "state": "fresh",
+    "display": "Pimiento fresco",
+    "index": 6
+  },
+  {
+    "label": "capsicum_rotten",
+    "fruit": "capsicum",
+    "state": "rotten",
+    "display": "Pimiento podrido",
+    "index": 7
+  },
+  {
+    "label": "cucumber_fresh",
+    "fruit": "cucumber",
+    "state": "fresh",
+    "display": "Pepino fresco",
+    "index": 8
+  },
+  {
+    "label": "cucumber_rotten",
+    "fruit": "cucumber",
+    "state": "rotten",
+    "display": "Pepino podrido",
+    "index": 9
+  },
+  {
+    "label": "okra_fresh",
+    "fruit": "okra",
+    "state": "fresh",
+    "display": "Okra fresco",
+    "index": 10
+  },
+  {
+    "label": "okra_rotten",
+    "fruit": "okra",
+    "state": "rotten",
+    "display": "Okra podrido",
+    "index": 11
+  },
+  {
+    "label": "oranges_fresh",
+    "fruit": "oranges",
+    "state": "fresh",
+    "display": "Naranja fresco",
+    "index": 12
+  },
+  {
+    "label": "oranges_rotten",
+    "fruit": "oranges",
+    "state": "rotten",
+    "display": "Naranja podrido",
+    "index": 13
+  },
+  {
+    "label": "potato_fresh",
+    "fruit": "potato",
+    "state": "fresh",
+    "display": "Papa fresco",
+    "index": 14
+  },
+  {
+    "label": "potato_rotten",
+    "fruit": "potato",
+    "state": "rotten",
+    "display": "Papa podrido",
+    "index": 15
+  },
+  {
+    "label": "tomato_fresh",
+    "fruit": "tomato",
+    "state": "fresh",
+    "display": "Tomate fresco",
+    "index": 16
+  },
+  {
+    "label": "tomato_rotten",
+    "fruit": "tomato",
+    "state": "rotten",
+    "display": "Tomate podrido",
+    "index": 17
+  }
+]
