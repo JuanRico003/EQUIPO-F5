@@ -1,4 +1,4 @@
-# FruitScan – Clasificación de frescura de frutas y verduras
+# Clasificación de frescura de frutas y verduras
 
 **Arquitectura:** Front‑End (HTML/CSS/JS + `getUserMedia` + canvas) → Flask (API + Gunicorn) → Modelo IA (MobileNetV3‑Small fine‑tuned, ONNX/TorchScript) → PostgreSQL (tabla `predictions`).
 
