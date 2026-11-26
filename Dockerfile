@@ -33,4 +33,4 @@ HEALTHCHECK --interval=20s --timeout=5s --start-period=20s --retries=5 \
     CMD curl -fsS http://localhost:5000/api/health > /dev/null || exit 1
 
 # Un worker con varios hilos: el modelo ONNX se carga una sola vez en memoria.
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "--threads", "4", "--timeout", "90", "--access-logfile", "-", "wsgi:app"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} --workers 1 --threads 4 --timeout 120 --access-logfile - wsgi:app"]
